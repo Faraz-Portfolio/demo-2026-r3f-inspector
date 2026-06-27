@@ -9,7 +9,7 @@ import { useControls } from "./Inspector";
 export function Demo() {
   const meshRef = useRef<THREE.Mesh>(null!);
 
-  const controls = useControls(
+  const { text, spin, speed, material, textColor, geometry } = useControls(
     {
       text: { value: "Hello, world!" },
       spin: { value: true },
@@ -17,9 +17,17 @@ export function Demo() {
       material: {
         label: "Material",
         schema: {
-          transmission: { value: 1, min: 0, max: 1, step: 0.01 },
           roughness: { value: 0.5, min: 0, max: 1, step: 0.01 },
           thickness: { value: 0.2, min: 0, max: 2, step: 0.01 },
+        },
+      },
+      geometry: {
+        label: "Geometry",
+        schema: {
+          shape: {
+            options: ["Torus Knot", "Icosahedron", "Tetrahedron"],
+            value: "Torus Knot",
+          },
         },
       },
       textColor: { value: "#ff0000", color: true, label: "Text color" },
@@ -28,27 +36,40 @@ export function Demo() {
   );
 
   useFrame((_, dt) => {
-    if (controls.spin) meshRef.current.rotation.z += dt * controls.speed;
+    if (spin) {
+      meshRef.current.rotation.z += dt * speed;
+      meshRef.current.rotation.x += dt * speed;
+    }
   });
 
   return (
     <>
       <mesh ref={meshRef} position={[0, 2, 0]}>
-        <torusKnotGeometry args={[1, 0.4, 512, 128]} />
+        {(() => {
+          switch (geometry.shape) {
+            case "Torus Knot":
+              return <torusKnotGeometry args={[1, 0.4, 512, 128]} />;
+            case "Icosahedron":
+              return <icosahedronGeometry args={[1.5, 0]} />;
+            case "Tetrahedron":
+              return <tetrahedronGeometry args={[1.5, 0]} />;
+          }
+        })()}
+
         <meshPhysicalMaterial
-          transmission={controls.material.transmission}
-          roughness={controls.material.roughness}
-          thickness={controls.material.thickness}
+          transmission={1}
+          roughness={material.roughness}
+          thickness={material.thickness}
         />
       </mesh>
 
       <group position={[0, 2, -2]}>
-        <Center key={controls.text}>
+        <Center key={text}>
           <Text3D font="/Roboto Condensed_Regular.json" castShadow>
-            {controls.text}
+            {text}
             <meshStandardMaterial
-              emissive={new THREE.Color(controls.textColor).multiplyScalar(10)}
-              color={controls.textColor}
+              emissive={new THREE.Color(textColor).multiplyScalar(10)}
+              color={textColor}
             />
           </Text3D>
         </Center>
@@ -60,7 +81,7 @@ export function Demo() {
         <Lightformer
           form="rect"
           intensity={5}
-          color={controls.textColor}
+          color={textColor}
           scale={[10, 5]}
           target={[0, 0, 0]}
           position={[0, 5, -10]}

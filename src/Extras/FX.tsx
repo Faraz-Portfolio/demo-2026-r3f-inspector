@@ -21,6 +21,8 @@ export function FX() {
     const bloomPass = bloom(scenePass, 0.1, 0.8, 1);
     const bloomedPass = scenePass.add(bloomPass);
 
+    bloomPass.toInspector("Bloom Pass");
+
     pipeline.outputNode = bloomedPass;
 
     const onResize = () => {

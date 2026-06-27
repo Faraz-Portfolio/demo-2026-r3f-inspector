@@ -628,9 +628,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"decals@workspace:.":
+"demo-2026-r3f-inspector@workspace:.":
   version: 0.0.0-use.local
-  resolution: "decals@workspace:."
+  resolution: "demo-2026-r3f-inspector@workspace:."
   dependencies:
     "@react-three/drei": "npm:^10.7.7"
     "@react-three/fiber": "npm:^9.6.1"
