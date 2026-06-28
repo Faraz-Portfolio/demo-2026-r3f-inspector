@@ -6,6 +6,7 @@ import { ContactShadows } from "./Extras/ContactShadows";
 import { FX } from "./Extras/FX";
 import { useControls } from "./Inspector";
 
+const base = import.meta.env.BASE_URL;
 export function Demo() {
   const meshRef = useRef<THREE.Mesh>(null!);
 
@@ -65,7 +66,7 @@ export function Demo() {
 
       <group position={[0, 2, -2]}>
         <Center key={text}>
-          <Text3D font="/Roboto Condensed_Regular.json" castShadow>
+          <Text3D font={base + "Roboto Condensed_Regular.json"} castShadow>
             {text}
             <meshStandardMaterial
               emissive={new THREE.Color(textColor).multiplyScalar(10)}
