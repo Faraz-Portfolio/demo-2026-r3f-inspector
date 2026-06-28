@@ -1,9 +1,11 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
+import { UI } from "./UI";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <App />
+    <UI />
   </StrictMode>,
 );
